@@ -5,7 +5,7 @@ const { verify, reset } = require('../helper/html');
 const { send_mail } = require('../middlewares/nodemailer');
 const {validate} = require('../utils/validation')
 const joi = require('joi');
-const { registerUserSchema} = require('../Validation/user');
+const { registerUserSchema, loginSchema} = require('../Validation/user');
 
 
 exports.registerUser = async (req, res) => {
@@ -156,7 +156,10 @@ exports.verifyUser = async (req, res) => {
 
 exports.loginUser = async (req, res) => {
   try {
-    const { email, password } = req.body;
+
+    const validatedData = await validate(req.body,loginSchema);
+
+    const { email, password } = validatedData;
 
     if (!email) {
       return res.status(400).json({
@@ -210,14 +213,14 @@ exports.loginUser = async (req, res) => {
       token
     })
   } catch (error) {
-    console.log(error.message);
+    // console.log(error.message);
     if (error instanceof jwt.JsonWebTokenError) {
       return res.status(400).json({
         message: 'Session expired. Please login again'
       })
     }
     res.status(500).json({
-      message: 'Error Logging user In'
+      message: 'Internal Server Error',data:error.message
     })
   }
 };
