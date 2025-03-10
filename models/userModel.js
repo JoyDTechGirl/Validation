@@ -2,41 +2,43 @@ const mongoose = require("mongoose");
 
 const userSChema = new mongoose.Schema({
 
-    fullName: {
+  fullName: {
         type: String,
         require: true
-    },
+  },
 
-    email: {
+  email: {
         type: String,
         required: true,
         lowercase: true
-    },
+  },
 
-    password: {
+  password: {
         type: String,
-        required: true
-    },
+  },
 
-    gender: {
+  gender: {
         type: String,
         enum: ["Male", "Female"]
-    },
+  },
 
-    isAdmin: {
+  isAdmin: {
         type: Boolean,
         default: false
-    },
+  },
 
-    isVerified: {
+  isVerified: {
         type: Boolean,
         default: false
-    },
+  },
 
-    productId: [{
+  productId: [{
         type: mongoose.SchemaTypes.ObjectId,
         ref: "Products"
-    }]
+  }],
+  profileId: {
+      type: String
+  }
 
 }, { timestamps: true })
 
